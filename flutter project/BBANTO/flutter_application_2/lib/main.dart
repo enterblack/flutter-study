@@ -24,6 +24,7 @@ class Grade extends StatelessWidget {
         centerTitle: true,
         elevation: 0.0,
       ),
+      
       body: Padding(
         padding: EdgeInsets.fromLTRB(30.0, 40.0, 0.0, 0.0),
         child: Column(
