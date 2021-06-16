@@ -8,10 +8,13 @@ class ScreenC extends StatelessWidget {
         title: Text("ScreenC"),
       ),
       body: Center(
-        child: Text(
-          "ScreenC",
-          style: TextStyle(fontSize: 24.0),
-        ),
+        child: RaisedButton(
+          color: Colors.redAccent,
+          child: Text("Go to Screen A"),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        )
       ),
     );
   }
