@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_try_firebase_auth/models/brew.dart';
 
 class DatabaseService {
   // collection reference
-  final String uid;
+  final String? uid;
   DatabaseService({this.uid});
   final CollectionReference brewCollection =
       FirebaseFirestore.instance.collection("brews");
@@ -13,5 +14,20 @@ class DatabaseService {
       "name": name,
       "strength": strength,
     });
+  }
+
+  //brew list from snapshot
+  List<Brew> _brewListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Brew(
+          name: doc.get("name") ?? '',
+          strength: doc.get('strength') ?? 0,
+          sugars: doc.get('sugars') ?? '0');
+    }).toList();
+  }
+
+  //get brews Stream
+  Stream<List<Brew>> get brews {
+    return brewCollection.snapshots().map(_brewListFromSnapshot);
   }
 }

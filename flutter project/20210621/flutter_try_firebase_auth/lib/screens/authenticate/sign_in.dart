@@ -4,7 +4,7 @@ import 'package:flutter_try_firebase_auth/shared/constants.dart';
 import 'package:flutter_try_firebase_auth/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
-  final Function toggleView;
+  final Function? toggleView;
   SignIn({this.toggleView});
 
   @override
@@ -34,7 +34,7 @@ class _SignInState extends State<SignIn> {
               actions: <Widget>[
                 FlatButton.icon(
                     onPressed: () {
-                      widget.toggleView();
+                      widget.toggleView!();
                     },
                     icon: Icon(Icons.person),
                     label: Text("register"))
@@ -53,7 +53,7 @@ class _SignInState extends State<SignIn> {
                         decoration:
                             textInputDecoration.copyWith(hintText: "Email"),
                         validator: (val) =>
-                            val.isEmpty ? "Enter an email" : null,
+                            val!.isEmpty ? "Enter an email" : null,
                         onChanged: (val) {
                           setState(() => email = val);
                         },
@@ -65,7 +65,7 @@ class _SignInState extends State<SignIn> {
                         decoration:
                             textInputDecoration.copyWith(hintText: "password"),
                         obscureText: true,
-                        validator: (val) => val.length < 6
+                        validator: (val) => val!.length < 6
                             ? "Enter a password 6+ chars long"
                             : null,
                         onChanged: (val) {
@@ -80,7 +80,7 @@ class _SignInState extends State<SignIn> {
                         child: Text("Sign in",
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
-                          if (_formKey.currentState.validate()) {
+                          if (_formKey.currentState!.validate()) {
                             setState(() => loading = true);
                             dynamic result = await _auth
                                 .signInWithEmailAndPassword(email, password);

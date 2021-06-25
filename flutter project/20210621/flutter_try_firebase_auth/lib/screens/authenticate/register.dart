@@ -4,7 +4,7 @@ import 'package:flutter_try_firebase_auth/shared/constants.dart';
 import 'package:flutter_try_firebase_auth/shared/loading.dart';
 
 class Register extends StatefulWidget {
-  final Function toggleView;
+  final Function? toggleView;
   Register({this.toggleView});
 
   @override
@@ -32,7 +32,7 @@ class _RegisterState extends State<Register> {
               actions: <Widget>[
                 FlatButton.icon(
                     onPressed: () {
-                      widget.toggleView();
+                      widget.toggleView!();
                     },
                     icon: Icon(Icons.person),
                     label: Text("Sign in"))
@@ -51,7 +51,7 @@ class _RegisterState extends State<Register> {
                         decoration:
                             textInputDecoration.copyWith(hintText: "Email"),
                         validator: (val) =>
-                            val.isEmpty ? "Enter an email" : null,
+                            val!.isEmpty ? "Enter an email" : null,
                         onChanged: (val) {
                           setState(() => email = val);
                         },
@@ -62,7 +62,7 @@ class _RegisterState extends State<Register> {
                       TextFormField(
                         decoration:
                             textInputDecoration.copyWith(hintText: "password"),
-                        validator: (val) => val.length < 6
+                        validator: (val) => val!.length < 6
                             ? "Enter a password 6+ chars long"
                             : null,
                         obscureText: true,
@@ -78,7 +78,7 @@ class _RegisterState extends State<Register> {
                         child: Text("register",
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
-                          if (_formKey.currentState.validate()) {
+                          if (_formKey.currentState!.validate()) {
                             setState(() => loading = true);
                             dynamic result = await _auth
                                 .registerWithEmailAndPassword(email, password);

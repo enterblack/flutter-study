@@ -1,5 +1,5 @@
 class Auser {
-  final String uid;
+  final String? uid;
 
   Auser({this.uid});
 }
