@@ -34,11 +34,44 @@ class _BoardState extends State<Board> {
               })
         ],
       ),
-      body: Center(
-        child: Text("test board"),
-        //이제 여기에서 firebase에서 저장된 글들을 불러와야 됨 ㅎㅎ
-        //어떻게 불러오는지는 내가 확인을 해야됨 ㅎㅎ
-        //column등을 불러서 제목 / 등록일 / 등록 당시 아이디 출력
+      body: Column(
+        children: [
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              verticalDirection: VerticalDirection.down,
+              children: [
+                Text("번호"),
+                SizedBox(
+                  width: 30.0,
+                  height: 20.0,
+                ),
+                Text("주제"),
+                SizedBox(
+                  width: 30.0,
+                ),
+                Text("제목"),
+                SizedBox(
+                  width: 30.0,
+                ),
+                Text("작성자"),
+                SizedBox(
+                  width: 30.0,
+                ),
+                Text("시간")
+              ],
+            ),
+
+            //이제 여기에서 firebase에서 저장된 글들을 불러와야 됨 ㅎㅎ
+
+            //어떻게 불러오는지는 내가 확인을 해야됨 ㅎㅎ
+            //column등을 불러서 제목 / 등록일 / 등록 당시 아이디 출력
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text("123")],
+          )
+        ],
       ),
       backgroundColor: Colors.blue[50],
     );
