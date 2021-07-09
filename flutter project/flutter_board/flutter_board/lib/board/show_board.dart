@@ -62,7 +62,8 @@ class _BoardState extends State<Board> {
                 Text("시간")
               ],
             ),
-
+          ),
+          Row(
             //이제 여기에서 firebase에서 저장된 글들을 불러와야 됨 ㅎㅎ
 
             //어떻게 불러오는지는 내가 확인을 해야됨 ㅎㅎ
@@ -71,10 +72,8 @@ class _BoardState extends State<Board> {
             //그리고 해당 글을 클릭할때 정보들을 보여주고 밑에다가
             //수정 및 삭제 버튼과 댓?글(만들까?) 생기고
             //해당하는 글의 비밀번호를 알아야지만 삭제 및 수정이 가능하게 만들기
-          ),
-          Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text("123")],
+            children: [],
           )
         ],
       ),
