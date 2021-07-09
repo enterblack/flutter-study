@@ -1,7 +1,7 @@
-class User1 {
+class User {
   final String uid;
 
-  User1({this.uid});
+  User({this.uid});
 }
 
 class UserData {

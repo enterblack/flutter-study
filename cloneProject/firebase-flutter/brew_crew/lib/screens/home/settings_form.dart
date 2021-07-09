@@ -70,12 +70,7 @@ class _SettingsFormState extends State<SettingsForm> {
                     onChanged: (val) =>
                         setState(() => _currentStrength = val.round()),
                   ),
-                  RaisedButton(
-                      color: Colors.pink[400],
-                      child: Text(
-                        'Update',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                  ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           await DatabaseService(uid: user.uid).updateUserData(
@@ -84,7 +79,13 @@ class _SettingsFormState extends State<SettingsForm> {
                               _currentStrength ?? snapshot.data.strength);
                           Navigator.pop(context);
                         }
-                      }),
+                      },
+                      child: Text(
+                        'Update',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.pink[400]))
                 ],
               ),
             );
