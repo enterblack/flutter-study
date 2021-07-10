@@ -1,5 +1,6 @@
 import 'package:brew_crew/screens/wrapper.dart';
-import 'package:brew_crew/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:firebase_auth/firebase_auth.dart' as firebase show User;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:brew_crew/models/user.dart';
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<User>.value(
-      // value: AuthService().user,
+      value: Stream.value(User()),
       initialData: null,
       child: MaterialApp(
         home: Wrapper(),
