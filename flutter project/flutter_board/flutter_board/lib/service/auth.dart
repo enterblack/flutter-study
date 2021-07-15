@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_board/models/account.dart';
 
@@ -7,9 +5,9 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //create user obj based on FireBaseUser
-  Account _userFromFirebaseUser(Account account) {
-    return account != null ? Account(uid: account.uid) : null;
-  }
+  // Account _userFromFirebaseUser(Account account) {
+  //   return account != null ? Account(uid: account.uid) : null;
+  // }
 
   // // auth Change user stream
   // Stream<Account> get user {

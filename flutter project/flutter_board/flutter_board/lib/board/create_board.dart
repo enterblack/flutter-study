@@ -8,6 +8,9 @@ class CreateBoard extends StatefulWidget {
 }
 
 class _CreateBoardState extends State<CreateBoard> {
+  String id = "";
+  String pw = "";
+
   TextEditingController idController = TextEditingController();
   TextEditingController pwController = TextEditingController();
   TextEditingController titleController = TextEditingController();
@@ -27,7 +30,7 @@ class _CreateBoardState extends State<CreateBoard> {
               icon: Icon(Icons.check),
               iconSize: 40.0,
               color: Colors.blueAccent,
-              onPressed: () {
+              onPressed: () async {
                 if (idController.text.length < 2) {
                   showMinIdSnackBar(context);
                 } else if (pwController.text.length < 4) {

@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_board/board/create_board.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 
 class Board extends StatefulWidget {
@@ -39,45 +40,80 @@ class _BoardState extends State<Board> {
               })
         ],
       ),
-      body: Column(
-        children: [
-          Padding(padding: EdgeInsets.only(top: 30.0)),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              verticalDirection: VerticalDirection.down,
-              children: [
-                Text("번호"),
-                SizedBox(
-                  width: 30.0,
-                ),
-                Text("제목"),
-                SizedBox(
-                  width: 30.0,
-                ),
-                Text("작성자"),
-                SizedBox(
-                  width: 30.0,
-                ),
-                Text("시간")
-              ],
-            ),
-          ),
-          Row(
-            //이제 여기에서 firebase에서 저장된 글들을 불러와야 됨 ㅎㅎ
-
-            //어떻게 불러오는지는 내가 확인을 해야됨 ㅎㅎ
-            //column등을 불러서 제목 / 등록일 / 등록 당시 아이디 출력
-
-            //그리고 해당 글을 클릭할때 정보들을 보여주고 밑에다가
-            //수정 및 삭제 버튼과 댓?글(만들까?) 생기고
-            //해당하는 글의 비밀번호를 알아야지만 삭제 및 수정이 가능하게 만들기
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [],
-          )
-        ],
+      body: Center(
+        child: StreamBuilder(
+          initialData: Text("데이터 없음"),
+          stream: FirebaseFirestore.instance.collection('board').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return Text("Error: ${snapshot.error}");
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Text("Loading..");
+              default:
+                return ListView(children: getBoardItems(snapshot));
+              // return new ListView(
+              //   children: snapshot.data.docs.map((DocumentSnapshot docment) {
+              //     Map<String, dynamic> data =
+              //         docment.data() as Map<String, dynamic>;
+              //     return new ListTile(
+              //       title: new Text(data["title"]),
+              //       subtitle: new Text(data["id"]),
+              //     );
+              //   }).toList(),
+              // );
+            }
+          },
+        ),
       ),
+      // body: Column(
+      //   children: [
+      //     Padding(padding: EdgeInsets.only(top: 30.0)),
+      //     Center(
+      //       child: Row(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         verticalDirection: VerticalDirection.down,
+      //         children: [
+      //           Text("번호"),
+      //           SizedBox(
+      //             width: 30.0,
+      //           ),
+      //           Text("제목"),
+      //           SizedBox(
+      //             width: 30.0,
+      //           ),
+      //           Text("작성자"),
+      //           SizedBox(
+      //             width: 30.0,
+      //           ),
+      //           Text("시간")
+      //         ],
+      //       ),
+      //     ),
+
+      //       //이제 여기에서 firebase에서 저장된 글들을 불러와야 됨 ㅎㅎ
+
+      //       //어떻게 불러오는지는 내가 확인을 해야됨 ㅎㅎ
+      //       //column등을 불러서 제목 / 등록일 / 등록 당시 아이디 출력
+
+      //       //그리고 해당 글을 클릭할때 정보들을 보여주고 밑에다가
+      //       //수정 및 삭제 버튼과 댓?글(만들까?) 생기고
+      //       //해당하는 글의 비밀번호를 알아야지만 삭제 및 수정이 가능하게 만들기
+
+      //   ],
+
+      // ),
       backgroundColor: Colors.blue[50],
     );
   }
+}
+
+getBoardItems(AsyncSnapshot snapshot) {
+  return snapshot.data.document
+      .map((doc) => new ListTile(
+            title: new Text(
+              doc["title"],
+            ),
+            subtitle: new Text(doc["id"]),
+          ))
+      .toList();
 }
