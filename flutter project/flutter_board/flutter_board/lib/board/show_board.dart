@@ -46,11 +46,36 @@ class _BoardState extends State<Board> {
           stream: FirebaseFirestore.instance.collection('board').snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) return Text("Error: ${snapshot.error}");
+
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return Text("Loading..");
+
               default:
-                return ListView(children: getBoardItems(snapshot));
+                if (!snapshot.hasData) return Text("Laoding...");
+
+                return new ListView.builder(itemBuilder: (context, index) {
+                  return Container(
+                    height: 200,
+                    child: ListView(
+                      children: snapshot.data.docs.map<Widget>((document) {
+                        Map<String, dynamic> data =
+                            document.data() as Map<String, dynamic>;
+                        return new ListTile(
+                          title: new Text(
+                            data['title'],
+                            style:
+                                TextStyle(color: Colors.black87, fontSize: 20),
+                          ),
+                          subtitle: new Text(
+                            data['id'],
+                            style: TextStyle(color: Colors.blueAccent[200]),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  );
+                });
               // return new ListView(
               //   children: snapshot.data.docs.map((DocumentSnapshot docment) {
               //     Map<String, dynamic> data =
@@ -105,15 +130,4 @@ class _BoardState extends State<Board> {
       backgroundColor: Colors.blue[50],
     );
   }
-}
-
-getBoardItems(AsyncSnapshot snapshot) {
-  return snapshot.data.document
-      .map((doc) => new ListTile(
-            title: new Text(
-              doc["title"],
-            ),
-            subtitle: new Text(doc["id"]),
-          ))
-      .toList();
 }
