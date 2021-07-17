@@ -56,21 +56,30 @@ class _BoardState extends State<Board> {
 
                 return new ListView.builder(itemBuilder: (context, index) {
                   return Container(
-                    height: 200,
+                    height: 600,
+                    //높이를 높게 설정한 이유
+                    //짧게 하면 데이터를 반복해서 보여준다 그래서
+                    //반복하지 않게 출력을 하거나
+                    //높이를 높게 만들어서 정상인것 처럼 만드는방법이 있는데
+                    //현재 높이를 높게 만들었다 ;;;
+
                     child: ListView(
                       children: snapshot.data.docs.map<Widget>((document) {
                         Map<String, dynamic> data =
                             document.data() as Map<String, dynamic>;
                         return new ListTile(
                           title: new Text(
-                            data['title'],
+                            data['number'] + "번글 " + data['title'],
                             style:
                                 TextStyle(color: Colors.black87, fontSize: 20),
                           ),
                           subtitle: new Text(
-                            data['id'],
+                            "ID  : " + data['id'] + "  " + data['time'],
                             style: TextStyle(color: Colors.blueAccent[200]),
                           ),
+                          focusColor: Colors.lightBlueAccent,
+                          hoverColor: Colors.red,
+                          // onTap: ,
                         );
                       }).toList(),
                     ),
@@ -90,6 +99,7 @@ class _BoardState extends State<Board> {
           },
         ),
       ),
+
       // body: Column(
       //   children: [
       //     Padding(padding: EdgeInsets.only(top: 30.0)),
