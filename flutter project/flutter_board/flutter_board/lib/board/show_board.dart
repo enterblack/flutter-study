@@ -2,9 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_board/board/create_board.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_board/board/detail_screen.dart';
+
 // import 'package:firebase_auth/firebase_auth.dart';
 
 class Board extends StatefulWidget {
+  get title => null;
+
   @override
   _BoardState createState() => _BoardState();
 }
@@ -64,6 +68,7 @@ class _BoardState extends State<Board> {
                     //현재 높이를 높게 만들었다 ;;;
 
                     child: ListView(
+                      scrollDirection: Axis.vertical,
                       children: snapshot.data.docs.map<Widget>((document) {
                         Map<String, dynamic> data =
                             document.data() as Map<String, dynamic>;
@@ -77,9 +82,11 @@ class _BoardState extends State<Board> {
                             "ID  : " + data['id'] + "  " + data['time'],
                             style: TextStyle(color: Colors.blueAccent[200]),
                           ),
-                          focusColor: Colors.lightBlueAccent,
-                          hoverColor: Colors.red,
-                          // onTap: ,
+                          onTap: () => _detailScreen(
+                              context,
+                              data['title'].toString(),
+                              data['id'].toString(),
+                              data['note'].toString()),
                         );
                       }).toList(),
                     ),
@@ -140,4 +147,23 @@ class _BoardState extends State<Board> {
       backgroundColor: Colors.blue[50],
     );
   }
+
+  // _onSelected(data) {
+  //   String number1 = data;
+  //   try {
+  //     int number2 = int.parse(number1);
+  //   } on FormatException {
+  //     print("Format Error! (String)");
+  //   }
+  //   Navigator.push(context,
+  //       MaterialPageRoute(builder: (context) => DetailScreen(txt: text)));
+  // }
+}
+
+void _detailScreen(BuildContext context, String title, String id, String note) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              DetailScreen(appbarTitle: title, id: id, note: note)));
 }
