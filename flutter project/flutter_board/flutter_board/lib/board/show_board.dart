@@ -165,5 +165,5 @@ void _detailScreen(BuildContext context, String title, String id, String note) {
       context,
       MaterialPageRoute(
           builder: (context) =>
-              DetailScreen(appbarTitle: title, id: id, note: note)));
+              DetailScreen(writeTitle: title, id: id, note: note)));
 }
