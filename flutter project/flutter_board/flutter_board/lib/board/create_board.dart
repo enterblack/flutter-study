@@ -19,7 +19,7 @@ class _CreateBoardState extends State<CreateBoard> {
   TextEditingController pwController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController boardController = TextEditingController();
-
+  int lastNumber = 0;
   // _CreateBoardState{this.id, this.pw, this.number, this.note, this.time};
 
   @override
@@ -109,7 +109,7 @@ class _CreateBoardState extends State<CreateBoard> {
                               minWidth: 100.0,
                               height: 50.0,
                               child: ElevatedButton.icon(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (idController.text.length < 2) {
                                       showMinIdSnackBar(context);
                                     } else if (pwController.text.length < 4) {
@@ -129,13 +129,16 @@ class _CreateBoardState extends State<CreateBoard> {
                                       var formattedDate =
                                           DateFormat('yyyy-MM-dd').format(now);
 
-                                      Query query = FirebaseFirestore.instance
-                                          .collection('board')
-                                          .orderBy('number', descending: true)
-                                          .limit(1);
-                                      var lastNumber =
-                                          query.where('number').get();
+                                      // FirebaseFirestore.instance
+                                      //     .collection('board')
+                                      //     .snapshots()
+                                      //     .listen((data) {
+                                      //   data.docs.forEach((doc) {
+                                      //     lastNumber = lastNumber + 1;
+                                      //   });
+                                      // });
 
+                                      //이부분에 대해서 내일 다시 고민해보자
                                       FirebaseFirestore.instance
                                           .collection('board')
                                           .add({
@@ -150,7 +153,7 @@ class _CreateBoardState extends State<CreateBoard> {
                                         'time': formattedDate.toString(),
                                         'realtime': now.toString(),
                                         // 'time': DateTime.now().toString(),
-                                        'number': lastNumber.toString()
+                                        'number': (lastNumber + 1).toString()
 
                                         //ㅇㅋ 이제 해야되는거는 가장큰 number를 가져와서
                                         //번호를 확인하고 1 더하고 다시 넣어주는 것이다!!

@@ -4,6 +4,7 @@ class Board {
   final String id;
   final String pw;
   final DateTime time;
+  final DateTime realTime;
 
-  Board({this.number, this.title, this.id, this.pw, this.time});
+  Board(this.realTime, {this.number, this.title, this.id, this.pw, this.time});
 }
