@@ -1,20 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CreateBoard extends StatefulWidget {
-  const CreateBoard({Key key}) : super(key: key);
+  // const CreateBoard({Key key}) : super(key: key);
 
   @override
   _CreateBoardState createState() => _CreateBoardState();
 }
 
 class _CreateBoardState extends State<CreateBoard> {
-  String id = "";
-  String pw = "";
-
+  // final String id;
+  // final String pw;
+  // final String number;
+  // final String note;
+  // final DateTime time;
   TextEditingController idController = TextEditingController();
   TextEditingController pwController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController boardController = TextEditingController();
+
+  // _CreateBoardState{this.id, this.pw, this.number, this.note, this.time};
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +49,7 @@ class _CreateBoardState extends State<CreateBoard> {
                   //작성된 모든 문자열 데이터들을 firebase로 전송을 하게 하고
                   //작성된 페이지는 파괴를 하고 되돌아가기
                   showTestSendSnackBar(context); //Test Code
-
+                  // createUserBoard();
                 }
                 //여기에도 작성버튼 만들어서 편의성 증대
               })
@@ -93,7 +99,7 @@ class _CreateBoardState extends State<CreateBoard> {
                             keyboardType: TextInputType.text,
                           ),
                           //글쓰는 부분은 그 메모장 같이 생긴걸로 하면 될듯
-                          TextField(
+                          TextFormField(
                             controller: boardController,
                             decoration:
                                 InputDecoration(labelText: "Enter board"),
@@ -117,7 +123,40 @@ class _CreateBoardState extends State<CreateBoard> {
                                       //작성된 모든 문자열 데이터들을 firebase로 전송을 하게 하고
                                       //작성된 페이지는 파괴를 하고 되돌아가기
                                       showTestSendSnackBar(context); //Test Code
+                                      // createUserBoard();
+                                      //일단 되는지만 확인해보고 되면은 Funtion화
+                                      var now = DateTime.now();
+                                      var formattedDate =
+                                          DateFormat('yyyy-MM-dd').format(now);
 
+                                      Query query = FirebaseFirestore.instance
+                                          .collection('board')
+                                          .orderBy('number', descending: true)
+                                          .limit(1);
+                                      var lastNumber =
+                                          query.where('number').get();
+
+                                      FirebaseFirestore.instance
+                                          .collection('board')
+                                          .add({
+                                        'title': titleController.value.text
+                                            .toString(),
+                                        'id':
+                                            idController.value.text.toString(),
+                                        'pw':
+                                            pwController.value.text.toString(),
+                                        'note': boardController.value.text
+                                            .toString(),
+                                        'time': formattedDate.toString(),
+                                        'realtime': now.toString(),
+                                        // 'time': DateTime.now().toString(),
+                                        'number': lastNumber.toString()
+
+                                        //ㅇㅋ 이제 해야되는거는 가장큰 number를 가져와서
+                                        //번호를 확인하고 1 더하고 다시 넣어주는 것이다!!
+
+                                        //그리고 캡슐화 진행
+                                      });
                                     }
                                   },
                                   icon: Icon(Icons.add),
@@ -135,6 +174,12 @@ class _CreateBoardState extends State<CreateBoard> {
       backgroundColor: Colors.blue[50],
     );
   }
+}
+
+void createUserBoard(
+    String id, String pw, String title, String note, String time) {
+  // FirebaseFirestore.instance.doc().set(data);
+  //title, id , pw , note, time
 }
 
 void showEmptyBoardSnackBar(BuildContext context) {

@@ -55,7 +55,8 @@ class DetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [Text("isBottom?")],
             )
           ],
