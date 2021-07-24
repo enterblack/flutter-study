@@ -56,7 +56,7 @@ class _BoardState extends State<Board> {
                 return Text("Loading..");
 
               default:
-                if (!snapshot.hasData) return Text("Laoding...");
+                if (!snapshot.hasData) return Text("No Data!");
 
                 return new ListView.builder(itemBuilder: (context, index) {
                   return Container(
@@ -66,6 +66,7 @@ class _BoardState extends State<Board> {
                     //반복하지 않게 출력을 하거나
                     //높이를 높게 만들어서 정상인것 처럼 만드는방법이 있는데
                     //현재 높이를 높게 만들었다 ;;;
+                    //이거 내핸드폰에 넣어봤는데 밑에서 보이네 ㅠㅠ
 
                     child: ListView(
                       scrollDirection: Axis.vertical,

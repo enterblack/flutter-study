@@ -19,7 +19,7 @@ class _CreateBoardState extends State<CreateBoard> {
   TextEditingController pwController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController boardController = TextEditingController();
-  int lastNumber = 0;
+
   // _CreateBoardState{this.id, this.pw, this.number, this.note, this.time};
 
   @override
@@ -129,16 +129,6 @@ class _CreateBoardState extends State<CreateBoard> {
                                       var formattedDate =
                                           DateFormat('yyyy-MM-dd').format(now);
 
-                                      // FirebaseFirestore.instance
-                                      //     .collection('board')
-                                      //     .snapshots()
-                                      //     .listen((data) {
-                                      //   data.docs.forEach((doc) {
-                                      //     lastNumber = lastNumber + 1;
-                                      //   });
-                                      // });
-
-                                      //이부분에 대해서 내일 다시 고민해보자
                                       FirebaseFirestore.instance
                                           .collection('board')
                                           .add({
@@ -153,7 +143,7 @@ class _CreateBoardState extends State<CreateBoard> {
                                         'time': formattedDate.toString(),
                                         'realtime': now.toString(),
                                         // 'time': DateTime.now().toString(),
-                                        'number': (lastNumber + 1).toString()
+                                        'number': (1).toString()
 
                                         //ㅇㅋ 이제 해야되는거는 가장큰 number를 가져와서
                                         //번호를 확인하고 1 더하고 다시 넣어주는 것이다!!
@@ -163,7 +153,7 @@ class _CreateBoardState extends State<CreateBoard> {
                                     }
                                   },
                                   icon: Icon(Icons.add),
-                                  label: Text("")))
+                                  label: Text("저장")))
                         ],
                       ),
                     ),

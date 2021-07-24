@@ -57,7 +57,10 @@ class DetailScreen extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("isBottom?")],
+              children: [
+                IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+                IconButton(icon: Icon(Icons.delete), onPressed: () {})
+              ],
             )
           ],
         ),
