@@ -1,0 +1,32 @@
+iptable 도구
+
+리눅스 환경에서 특정 패킷을 분석해 차단및 허용  => 방화벽 정책수립을 할 수 있는 도구
+
+1. 모든 패킷 허용 후 일부 패킷 제한
+
+2. 모든 패킷 제한 후 일부 패킷 허용
+
+iptables chain 종류 (iptables chain 은 외부 -> 리눅스 , 리눅스 내부 -> 리눅스 외부로 패킷을 보낼때 접근제어를 한다)
+
+1.INPUT
+
+2.OUTPUT
+
+3.FORWARD : INPUT와 OUTPUT역활 (라우터에 방화벽 적용할때 쓰인다.)
+
+-A (Append)  -N (New) -P(Policy) 정책 결정 -L (List) -F(Flush) 
+
+
+원도우 파일 시스템 
+
+FAT 16 : 디스크지원용량 2GB NTFS, FAT 로 변경 및 변환 가능 
+
+FAT 32 : 2G이상 파티션지원 및 대용량 디스크지원 가능 NTFS 변경가능
+
+NTFS :파일 암호화 및 파일 레벨 보안 지원 FAT으로 변환불가
+
+
+
+
+
+
