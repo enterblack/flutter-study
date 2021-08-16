@@ -143,7 +143,10 @@ class _CreateBoardState extends State<CreateBoard> {
                                         'time': formattedDate.toString(),
                                         'realtime': now.toString(),
                                         // 'time': DateTime.now().toString(),
-                                        'number': (1).toString()
+                                        'number': FirebaseFirestore.instance
+                                            .collection('board')
+                                            .orderBy('number')
+                                            .get()
 
                                         //ㅇㅋ 이제 해야되는거는 가장큰 number를 가져와서
                                         //번호를 확인하고 1 더하고 다시 넣어주는 것이다!!
