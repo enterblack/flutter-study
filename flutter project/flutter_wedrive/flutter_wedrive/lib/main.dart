@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:latlong/latlong.dart';
+import 'package:geocode/geocode.dart';
+import 'package:latlong2/latlong.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,9 +31,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double long = 49.5;
-  double lat = -0.09;
-  LatLng point = LatLng(49.5, -0.09);
+  double long = 37.4236;
+  double lat = 126.6965;
+  LatLng point = LatLng(37.4236, 126.6965);
   var location = [];
   @override
   Widget build(BuildContext context) {
@@ -42,15 +42,19 @@ class _MyHomePageState extends State<MyHomePage> {
         FlutterMap(
           options: MapOptions(
               onTap: (p) async {
-                location = await Geocoder.local.findAddressesFromCoordinates(
-                    new Coordinates(p.latitude, p.longitude));
+                GeoCode geoCode = GeoCode();
+                try {
+                  Coordinates coordinates =
+                      await geoCode.forwardGeocoding(address: "temp address");
+                } catch (e) {
+                  print(e);
+                }
                 setState(() {
                   point = p;
                   print(p);
                 });
-                print("${location.first.countryName}");
               },
-              center: LatLng(49.5, -0.09), //나중에 설정하자 자기위치
+              center: LatLng(37.4236, 126.6965), //나중에 설정하자 자기위치
               zoom: 10.0),
           layers: [
             TileLayerOptions(
