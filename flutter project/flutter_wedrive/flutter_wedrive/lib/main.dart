@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geocode/geocode.dart';
+// import 'package:flutter_wedrive/data/my_location.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'dart:async';
 
 void main() {
   runApp(MyApp());
@@ -9,6 +11,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,31 +34,86 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double long = 37.4236;
-  double lat = 126.6965;
+  static const countdownDuration = Duration(minutes: 10);
+  Duration duration = Duration();
+  Timer? timer;
+  bool isNotStart = true;
+  bool isCountdown = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isNotStart = true;
+    reset();
+  }
+
+  void reset() {
+    if (isCountdown) {
+      setState(() {
+        duration = countdownDuration;
+      });
+    } else {
+      setState(() {
+        duration = Duration();
+      });
+    }
+  }
+
+  void resetTimer() {
+    reset();
+    setState(() {
+      timer?.cancel();
+    });
+  }
+
+  void startTimer() {
+    reset();
+
+    timer = Timer.periodic(Duration(seconds: 1), (_) => addTime());
+  }
+
+  void addTime() {
+    final addSeconds = isCountdown ? -1 : 1;
+    //countdown을 하면 1초당 -1씩 증가를 한다 그런데 이 어플은 증가만 하니까 항상 false
+    setState(() {
+      final seconds = duration.inSeconds + addSeconds;
+      if (seconds < 0) {
+        timer?.cancel();
+      } else {
+        duration = Duration(seconds: seconds);
+      }
+    });
+  }
+
   LatLng point = LatLng(37.4236, 126.6965);
+  //현재 자신의 위치를 가져오기 너무 힘들다 일단 다른거 부터 하자
+  var startButtonText = "기록시작하기";
+
   var location = [];
   @override
   Widget build(BuildContext context) {
+    //build 안에서 다른변수에 값을 넣어야한다!! 띠용!
+    // LatLng point = LatLng(latitude, longitude);
+    //여기서 호출해버리면 고정이 되버린다...
+    Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
         FlutterMap(
           options: MapOptions(
               onTap: (p) async {
-                GeoCode geoCode = GeoCode();
-                try {
-                  Coordinates coordinates =
-                      await geoCode.forwardGeocoding(address: "temp address");
-                } catch (e) {
-                  print(e);
+                //조건을 걸어서 지도를 탭할 수 있게 만들어야한다.
+                if (isNotStart) {
+                  //do not anything
+                } else {
+                  setState(() {
+                    point = p;
+                    print(p);
+                  });
                 }
-                setState(() {
-                  point = p;
-                  print(p);
-                });
               },
-              center: LatLng(37.4236, 126.6965), //나중에 설정하자 자기위치
-              zoom: 10.0),
+              //center에서 현재 위치를 가져온것을 받게 만들어야됨
+              center: LatLng(37.4236, 126.6965), //아 화면센터!
+              zoom: 14.0),
           layers: [
             TileLayerOptions(
               urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -78,7 +136,72 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
+        Padding(
+          padding: EdgeInsets.only(top: size.height * 0.10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Center(
+                child: Card(
+                  color: Colors.white.withOpacity(0.0),
+                  child: Center(
+                      child: isNotStart
+                          ? Text(
+                              "준비중",
+                              style: TextStyle(fontSize: 25.0),
+                            )
+                          : buildTime()),
+                  //이건 진짜 쩐다 3항식
+                ),
+              ),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: size.height * 0.10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(),
+                    child: Text(startButtonText),
+                    onPressed: () {
+                      if (isNotStart) {
+                        setState(() {
+                          startButtonText = "기록 완료하기";
+                          startTimer();
+                        });
+                        isNotStart = false;
+                      } else {
+                        //팝업창 뜨고 저장한 일련번호, 경도, 위도, 속도, 시간 띄움
+                        //일단 팝업창 뜨면됨 타이머 다끄고
+                        //
+                        setState(() {
+                          startButtonText = "기록 시작하기";
+                          resetTimer();
+                        });
+                        isNotStart = true;
+                      }
+
+                      recode(point.latitude, point.longitude);
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
       ],
+    );
+  }
+
+//타이머 출처
+//https://www.youtube.com/watch?v=Bw6zc1nncyA&ab_channel=JohannesMilke
+  void recode(double latitude, double longitude) {}
+  Widget buildTime() {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours.remainder(60));
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return Text(
+      '$hours:$minutes:$seconds',
+      style: TextStyle(
+          fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.blue),
     );
   }
 }

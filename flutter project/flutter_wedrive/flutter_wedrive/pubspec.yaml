@@ -27,7 +27,8 @@ dependencies:
   
   flutter_map: ^0.13.1
   geocoding: ^2.0.0
-  geocode: ^1.0.1
+  geolocator: ^7.4.0
+  location: ^4.0.0
   tuple: ^2.0.0
   latlong2: ^0.8.0
   positioned_tap_detector_2: ^1.0.0
