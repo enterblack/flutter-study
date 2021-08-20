@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_wedrive/screen/result_screen.dart';
+import 'package:geolocator/geolocator.dart';
 // import 'package:flutter_wedrive/data/my_location.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -39,11 +41,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Timer? timer;
   bool isNotStart = true;
   bool isCountdown = false;
-
+  int initInt = 1;
+  double startLatitude = 37.4236, startLongitude = 126.6965;
+  List<dynamic> location = ["0, 37.4236, 126.6965, 0, 0"];
   @override
   void initState() {
     super.initState();
     isNotStart = true;
+
     reset();
   }
 
@@ -89,7 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
   //현재 자신의 위치를 가져오기 너무 힘들다 일단 다른거 부터 하자
   var startButtonText = "기록시작하기";
 
-  var location = [];
   @override
   Widget build(BuildContext context) {
     //build 안에서 다른변수에 값을 넣어야한다!! 띠용!
@@ -109,6 +113,25 @@ class _MyHomePageState extends State<MyHomePage> {
                     point = p;
                     print(p);
                   });
+
+                  double distance = Geolocator.distanceBetween(
+                      startLatitude, startLongitude, p.latitude, p.longitude);
+                  distance = distance / duration.inSeconds; // 거리가 아니고 속도임
+
+                  location.add(initInt.toString() +
+                      ", " +
+                      p.latitude.toStringAsFixed(2) +
+                      ", " +
+                      p.longitude.toStringAsFixed(2) +
+                      ", " +
+                      distance.toStringAsFixed(2) +
+                      ", " +
+                      "time!");
+
+                  print(location.last);
+                  startLatitude = p.latitude;
+                  startLongitude = p.longitude;
+                  initInt++;
                 }
               },
               //center에서 현재 위치를 가져온것을 받게 만들어야됨
@@ -169,16 +192,21 @@ class _MyHomePageState extends State<MyHomePage> {
                         isNotStart = false;
                       } else {
                         //팝업창 뜨고 저장한 일련번호, 경도, 위도, 속도, 시간 띄움
-                        //일단 팝업창 뜨면됨 타이머 다끄고
+                        //일단 팝업창 뜨면됨
                         //
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ResultScreen(
+                                location: location,
+                              ),
+                            ));
                         setState(() {
                           startButtonText = "기록 시작하기";
                           resetTimer();
                         });
                         isNotStart = true;
                       }
-
-                      recode(point.latitude, point.longitude);
                     },
                   ),
                 ),

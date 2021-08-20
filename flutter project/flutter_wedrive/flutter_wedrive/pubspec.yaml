@@ -34,6 +34,7 @@ dependencies:
   positioned_tap_detector_2: ^1.0.0
   transparent_image: ^2.0.0
   async: ^2.6.1
+  flutter_svg: ^0.18.0
   flutter_image: ^4.1.0
   vector_math: ^2.1.0
   proj4dart: ^2.0.0
