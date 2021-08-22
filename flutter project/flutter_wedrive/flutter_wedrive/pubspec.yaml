@@ -24,7 +24,7 @@ dependencies:
 
   flutter:
     sdk: flutter
-  
+  intl: ^0.17.0
   flutter_map: ^0.13.1
   geocoding: ^2.0.0
   geolocator: ^7.4.0

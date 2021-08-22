@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ResultScreen extends StatelessWidget {
   List<dynamic> location;
-  ResultScreen({required this.location});
+  List<double> distance;
+  Duration tempDuration;
+  ResultScreen(
+      {required this.location,
+      required this.distance,
+      required this.tempDuration});
 
   @override
   Widget build(BuildContext context) {
+    var addDistance = 0.0;
+    List timer = [];
+    for (int i = 0; i < location.length; i++) {
+      var index = location[i].split(", ");
+      timer.add(index[4]);
+    }
+    for (int i = 0; i < distance.length; i++) {
+      addDistance = addDistance + distance[i];
+    }
+    addDistance = addDistance / 1000; //Meter to KiloMeter
+    var addDistanceStr = addDistance.toStringAsFixed(2);
     return Scaffold(
       backgroundColor: Colors.grey,
       body: Padding(
@@ -58,7 +75,18 @@ class ResultScreen extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(20.0))),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [Text("1"), Text("2")],
+                      children: [
+                        Text(
+                          "총 이동거리 : $addDistanceStr KM",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 17.0),
+                        ),
+                        Text(
+                          "총 이동시간 : " + tempDuration.inSeconds.toString() + "초",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 17.0),
+                        )
+                      ],
                     ),
                   ),
                 )

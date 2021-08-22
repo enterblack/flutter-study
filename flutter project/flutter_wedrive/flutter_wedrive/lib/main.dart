@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_wedrive/screen/result_screen.dart';
 import 'package:geolocator/geolocator.dart';
-// import 'package:flutter_wedrive/data/my_location.dart';
-// import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:async';
 
@@ -43,7 +42,11 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isCountdown = false;
   int initInt = 1;
   double startLatitude = 37.4236, startLongitude = 126.6965;
-  List<dynamic> location = ["0, 37.4236, 126.6965, 0, 0"];
+  List<dynamic> location = [];
+  List<double> distance = [];
+
+  Duration tempDuration = Duration();
+
   @override
   void initState() {
     super.initState();
@@ -107,16 +110,22 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: (p) async {
                 //조건을 걸어서 지도를 탭할 수 있게 만들어야한다.
                 if (isNotStart) {
-                  //do not anything
+                  //do anything
                 } else {
                   setState(() {
                     point = p;
                     print(p);
                   });
-
-                  double distance = Geolocator.distanceBetween(
+                  var now = DateTime.now();
+                  var fommattedDate =
+                      DateFormat('yy-MM-dd hh:mm:ss').format(now);
+                  double distanceForSpeed = Geolocator.distanceBetween(
                       startLatitude, startLongitude, p.latitude, p.longitude);
-                  distance = distance / duration.inSeconds; // 거리가 아니고 속도임
+
+                  distance.add(Geolocator.distanceBetween(
+                      startLatitude, startLongitude, p.latitude, p.longitude));
+                  double speed = distanceForSpeed /
+                      (duration.inSeconds + 0.5); //생각해보니까 이거 m/s인데?
 
                   location.add(initInt.toString() +
                       ", " +
@@ -124,9 +133,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       ", " +
                       p.longitude.toStringAsFixed(2) +
                       ", " +
-                      distance.toStringAsFixed(2) +
+                      speed.toStringAsFixed(0) +
                       ", " +
-                      "time!");
+                      fommattedDate);
 
                   print(location.last);
                   startLatitude = p.latitude;
@@ -154,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.red,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ],
@@ -188,23 +197,29 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(() {
                           startButtonText = "기록 완료하기";
                           startTimer();
+                          location.clear();
+                          distance.clear();
                         });
                         isNotStart = false;
                       } else {
                         //팝업창 뜨고 저장한 일련번호, 경도, 위도, 속도, 시간 띄움
-                        //일단 팝업창 뜨면됨
                         //
+                        //
+
+                        setState(() {
+                          startButtonText = "기록 시작하기";
+                          tempDuration = duration;
+                          resetTimer();
+                        });
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ResultScreen(
-                                location: location,
-                              ),
+                                  location: location,
+                                  distance: distance,
+                                  tempDuration: tempDuration),
                             ));
-                        setState(() {
-                          startButtonText = "기록 시작하기";
-                          resetTimer();
-                        });
+
                         isNotStart = true;
                       }
                     },
@@ -220,7 +235,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //타이머 출처
 //https://www.youtube.com/watch?v=Bw6zc1nncyA&ab_channel=JohannesMilke
-  void recode(double latitude, double longitude) {}
   Widget buildTime() {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final hours = twoDigits(duration.inHours.remainder(60));
