@@ -121,9 +121,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       DateFormat('yy-MM-dd hh:mm:ss').format(now);
                   double distanceForSpeed = Geolocator.distanceBetween(
                       startLatitude, startLongitude, p.latitude, p.longitude);
+                  //속도를 구하기위한 거리계산식
 
-                  distance.add(Geolocator.distanceBetween(
-                      startLatitude, startLongitude, p.latitude, p.longitude));
+                  distance.add(distanceForSpeed); //거리 리스트 삽입
                   double speed = distanceForSpeed /
                       (duration.inSeconds + 0.5); //생각해보니까 이거 m/s인데?
 
@@ -144,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               },
               //center에서 현재 위치를 가져온것을 받게 만들어야됨
-              center: LatLng(37.4236, 126.6965), //아 화면센터!
+              center: LatLng(37.4236, 126.6965), // 화면센터
               zoom: 14.0),
           layers: [
             TileLayerOptions(
@@ -182,8 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               "준비중",
                               style: TextStyle(fontSize: 25.0),
                             )
-                          : buildTime()),
-                  //이건 진짜 쩐다 3항식
+                          : buildTime()), // 3항식인데 저장 할때마다 이런식으로 바뀜
                 ),
               ),
               Center(
